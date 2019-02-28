@@ -1,0 +1,27 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: golang:1.12.0-alpine3.9
+    steps:
+      - run:
+          name: Add dependencies
+          command: apk add --no-cache git openssh build-base && go get -u golang.org/x/lint/golint
+      - checkout
+      - run:
+          name: Vet
+          command: go vet ./...
+      - run:
+          name: Lint
+          command: golint ./...
+      - run:
+          name: Test
+          command: go test -v ./...
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
