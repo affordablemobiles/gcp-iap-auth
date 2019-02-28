@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -9,32 +9,32 @@ func TestAudiences(t *testing.T) {
 	testTable := []struct {
 		name string
 		aud  string
-		err  error
+		err  string
 	}{
 		{
 			name: "misc: not enough slashes",
 			aud:  "/projects/1234",
-			err:  fmt.Errorf("invalid audience length"),
+			err:  "must follow the format",
 		},
 		{
 			name: "app engine: valid",
 			aud:  "/projects/1234/apps/fake-project-id",
-			err:  nil,
+			err:  "",
 		},
 		{
 			name: "app engine: missing service details",
 			aud:  "/projects/1234/",
-			err:  fmt.Errorf("audience is missing service details"),
+			err:  "is missing service details",
 		},
 		{
 			name: "global: valid",
 			aud:  "/projects/1234/global/backendServices/1234",
-			err:  nil,
+			err:  "",
 		},
 		{
 			name: "global: missing service details",
 			aud:  "/projects/1234/",
-			err:  fmt.Errorf("audience is missing service details"),
+			err:  "is missing service details",
 		},
 	}
 
@@ -44,14 +44,14 @@ func TestAudiences(t *testing.T) {
 			_, err := ParseAudience(tc.aud)
 
 			switch {
-			case err == nil && tc.err == nil:
+			case err == nil && tc.err == "":
 				// noop
-			case err != nil && tc.err == nil:
+			case err != nil && tc.err == "":
 				t.Error("expected no error, got error:", err)
-			case err == nil && tc.err != nil:
+			case err == nil && tc.err != "":
 				t.Error("expected error, got no error:", tc.err)
-			case err != nil && tc.err != nil:
-				if err.Error() != tc.err.Error() {
+			case err != nil && tc.err != "":
+				if !strings.Contains(err.Error(), tc.err) {
 					t.Error("unexpected error:", err)
 				}
 			}
