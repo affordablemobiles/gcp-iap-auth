@@ -39,10 +39,7 @@ func initConfig() error {
 	if err := initAudiences(*audiences); err != nil {
 		return err
 	}
-	if err := initPublicKeys(*publicKeysPath); err != nil {
-		return err
-	}
-	return nil
+	return initPublicKeys(*publicKeysPath)
 }
 
 func initServerPort() error {
