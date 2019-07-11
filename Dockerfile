@@ -1,17 +1,14 @@
-FROM golang:1.12.0-alpine3.9 AS builder
-RUN apk add --no-cache git
-WORKDIR /build
-COPY . .
-RUN go build .
+FROM golang:1.12 as build-env
 
-FROM alpine:3.9
-RUN apk add --no-cache ca-certificates \
-    && addgroup -S gcp-iap-auth \
-    && adduser -S gcp-iap-auth -G gcp-iap-auth \
-    && mkdir /app \
-    && chown gcp-iap-auth:gcp-iap-auth /app
-USER gcp-iap-auth
-WORKDIR /app
-COPY --from=builder --chown=gcp-iap-auth /build/gcp-iap-auth .
+ADD . /go/src/github.com/a1comms/gcp-iap-auth
+WORKDIR /go/src/github.com/a1comms/gcp-iap-auth
 
-CMD ["/app/gcp-iap-auth"]
+ARG GO111MODULE=on
+ARG CGO_ENABLED=0
+
+RUN go mod vendor
+RUN go build -ldflags "-s -w" -o /go/bin/app
+
+FROM gcr.io/distroless/static
+COPY --from=build-env /go/bin/app /
+CMD ["/app"]
