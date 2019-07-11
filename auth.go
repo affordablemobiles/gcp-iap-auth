@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rainforestapp/gcp-iap-auth/jwt"
+	"github.com/a1comms/gcp-iap-auth/jwt"
 )
 
 type userIdentity struct {

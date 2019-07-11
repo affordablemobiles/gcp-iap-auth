@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/namsral/flag"
-	"github.com/rainforestapp/gcp-iap-auth/jwt"
+	"github.com/a1comms/gcp-iap-auth/jwt"
 )
 
 const flagEnvPrefix = "GCP_IAP_AUTH"
