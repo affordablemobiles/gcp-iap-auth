@@ -1,4 +1,4 @@
-module github.com/rainforestapp/gcp-iap-auth
+module github.com/a1comms/gcp-iap-auth
 
 require (
 	github.com/dgrijalva/jwt-go v3.0.0+incompatible
