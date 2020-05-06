@@ -25,6 +25,7 @@ func main() {
 	log.Printf("Matching audiences: %s\n", cfg.MatchAudiences)
 
 	http.HandleFunc("/auth", authHandler)
+	http.HandleFunc("/authWithAud", authAudHandler)
 	http.HandleFunc("/healthz", healthzHandler)
 
 	if backend != nil && *backend != "" {

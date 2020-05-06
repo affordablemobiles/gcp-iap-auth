@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/namsral/flag"
 	"github.com/a1comms/gcp-iap-auth/jwt"
+	"github.com/namsral/flag"
 )
 
 const flagEnvPrefix = "GCP_IAP_AUTH"
@@ -42,6 +42,19 @@ func initConfig() error {
 	return initPublicKeys(*publicKeysPath)
 }
 
+func initRequestCfg(aud string) (*jwt.Config, error) {
+	rCfg := &jwt.Config{}
+
+	err := initAudiencesCfg(rCfg, aud)
+	if err != nil {
+		return nil, err
+	}
+
+	rCfg.PublicKeys = cfg.PublicKeys
+
+	return rCfg, rCfg.Validate()
+}
+
 func initServerPort() error {
 	if len(*listenPort) == 0 {
 		if len(*tlsCertPath) != 0 || len(*tlsKeyPath) != 0 {
@@ -57,6 +70,10 @@ func initServerPort() error {
 }
 
 func initAudiences(audiences string) error {
+	return initAudiencesCfg(cfg, audiences)
+}
+
+func initAudiencesCfg(rCfg *jwt.Config, audiences string) error {
 	str, err := extractAudiencesRegexp(audiences)
 	if err != nil {
 		return err
@@ -65,7 +82,7 @@ func initAudiences(audiences string) error {
 	if err != nil {
 		return fmt.Errorf("Invalid audiences regular expression %q (%v)", str, err)
 	}
-	cfg.MatchAudiences = re
+	rCfg.MatchAudiences = re
 	return nil
 }
 
