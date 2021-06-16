@@ -11,7 +11,14 @@ type Claims struct {
 	jwt.StandardClaims
 	Email string `json:"email,omitempty"`
 
+	Google GoogleClaim `json:"google,omitempty"`
+
 	cfg *Config
+}
+
+type GoogleClaim struct {
+	AccessLevels []string `json:"access_levels,omitempty"`
+	DeviceID     string   `json:"device_id,omitempty"`
 }
 
 // Valid validates the Claims.
