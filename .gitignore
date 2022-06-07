@@ -7,3 +7,4 @@
 # build and dist files
 /build
 /dist
+/gcp-iap-auth
