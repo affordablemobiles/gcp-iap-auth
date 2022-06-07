@@ -1,4 +1,4 @@
-FROM golang:1.14 as build-env
+FROM golang:1.18 as build-env
 
 ADD . /go/src/github.com/a1comms/gcp-iap-auth
 WORKDIR /go/src/github.com/a1comms/gcp-iap-auth
