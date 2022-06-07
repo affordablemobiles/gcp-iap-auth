@@ -6,3 +6,5 @@ require (
 )
 
 go 1.13
+
+replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.1
